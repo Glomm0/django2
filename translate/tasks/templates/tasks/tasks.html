@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+{% block title%}All tasks {% endblock %}
+
+{% block content%} 
+<div class="space-x-3">
+    <div>
+    {% for task in tasks %}
+        
+            <a href="{% url 'tasks:details' task.id %}" class="py-4 px-4 bg-teal-200 rounded-full border border-gray-500 flex justify-between"> 
+                <p> {{task.text}}...</p>
+                <p> by: {{task.created_by}}</p>
+                <p> created at: {{task.created_at}}</p>
+            </a>
+        
+    {% endfor %}
+        </div>
+</div>
+
+{% endblock %}

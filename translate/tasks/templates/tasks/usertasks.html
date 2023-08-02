@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+{% block title%}My tasks {% endblock %}
+
+{% block content%} 
+<div class="space-x-3">
+    <ul >
+        {% for task in user_tasks %}
+            
+                <li class="py-4 px-4 bg-teal-200 rounded-full border border-gray-500 flex justify-between"> 
+                <a class="py-2 px-2" href="{% url 'tasks:details' task.id %}"> {{task.text}}</a>
+                
+                {% if task.is_done%}
+                <p class="bg-green-300 rounded-full py-2 px-2"> Done</p>
+                {% else%}
+                <p>Number of answers:{{ task.answer.count }}</p>
+                {%endif%}
+            </li>
+        
+    {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

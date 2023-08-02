@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+{% block title%}Details {% endblock %}
+
+{% block content%} 
+<div>
+    
+    {% if request.user == task.created_by %}
+        {% if not task.is_done%}
+        <form action="." method="post">   
+            {%csrf_token%}
+            {{form.text}}
+            
+            <button class = "bg-green-300 px-2 py-2 rounded-full border-gray-200"> Edit text</button>
+            
+        </form>
+        {% else %} 
+        <p class="bg-green-200 px-2 py-2 rounded-xl border border-gray-500">{{task.text}}</p>
+        {% endif %}
+    {% else %}
+        <p class="bg-green-200 px-2 py-2 rounded-xl border border-gray-500">Text: {{task.text}}</p>
+        {% if not task.is_done%}
+        <form action="." method="post">   
+            {%csrf_token%}
+            {{form.answer_text}}
+            
+            <button class = "bg-green-300 px-2 py-2 rounded-full border-gray-200"> Send Translation</button>
+            
+        </form> 
+        {% endif %}
+    {% endif %}
+
+    <div class="flex flex-col center-items bg-green-300 rounded-xl border border-gray-500 py-2 px-2">
+        {% if task.is_done %}
+                <p class="basis-1/4 text-lg text-semibold">Final answer:</p>
+        {% else%}
+        <p class="basis-1/4 text-lg text-semibold">Answers:</p>
+        {% endif %}
+        {% for answer in answers%}
+        <div class="basis-3/4 flex justify-between center-items border-gray-500 border rounded-xl px-1 py-1">
+            
+            <p>{{answer.answer_text}}</p>
+               <p> by: {{answer.taken_by}}</p>
+            {% if request.user == task.created_by  and not task.is_done%}
+                <a href="{% url 'tasks:manage_answer' task.id %}?decision=accept&taken_task={{answer.id}}">Accept</a>
+                <a href="{% url 'tasks:manage_answer' task.id %}?decision=decline&taken_task={{answer.id}}">Decline</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
